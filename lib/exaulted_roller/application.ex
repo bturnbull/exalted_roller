@@ -11,7 +11,7 @@ defmodule ExaultedRoller.Application do
       # Start the Telemetry supervisor
       ExaultedRollerWeb.Telemetry,
       # Start the Ecto repository
-      ExaultedRoller.Repo,
+      # ExaultedRoller.Repo,
       # Start the PubSub system
       {Phoenix.PubSub, name: ExaultedRoller.PubSub},
       # Start the Endpoint (http/https)
