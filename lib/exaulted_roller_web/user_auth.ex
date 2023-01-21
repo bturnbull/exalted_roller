@@ -5,13 +5,34 @@ defmodule ExaultedRollerWeb.UserAuth do
   import Phoenix.Controller
 
   alias ExaultedRoller.Players
+  alias ExaultedRoller.Players.Player
   alias ExaultedRoller.Tables
+  alias ExaultedRoller.Tables.Table
+
+  def join_table(conn, %{"player_name" => player_name, "character_name" => character_name, "table_uid" => ""} = _params) do
+    case Tables.create() do
+      %Table{} = table ->
+        join_table(conn, %{"player_name" => player_name, "character_name" => character_name, "table_uid" => table.uid})
+
+      _ ->
+        redirect(conn, to: join_path(conn))
+    end
+  end
 
   def join_table(conn, %{"player_name" => player_name, "character_name" => character_name, "table_uid" => table_uid} = _params) do
-    conn
-    |> put_session(:player, Players.create(name: player_name, character: character_name))
-    |> put_session(:table, Tables.create_or_join(uid: table_uid))
-    |> redirect(to: signed_in_path(conn))
+    with %Player{} = player <- Players.create(name: player_name, character: character_name),
+         %Table{} = table <- Tables.join(uid: table_uid)
+    do
+      conn
+      |> put_session(:player, player)
+      |> put_session(:table, table)
+      |> redirect(to: signed_in_path(conn))
+    else
+      _ ->
+        conn
+        |> put_flash(:error, "Table not found.")
+        |> redirect(to: join_path(conn))
+    end
   end
 
   def join_table(conn, _) do

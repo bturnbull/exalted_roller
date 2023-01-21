@@ -1,10 +1,15 @@
 defmodule ExaultedRoller.Players do
 
+  alias ExaultedRoller.Players.Player
+
+  @spec create(name: String.t(), character: String.t()) :: Player.t() | nil
   def create(name: name, character: character) do
-    if is_nil(name) or is_nil(character) do
-      nil
-    else
-      %{name: name, character: character}  # %Player{}
+    case Player.create(%{name: name, character: character}) do
+      {:ok, player} ->
+        player
+
+      _ ->
+        nil
     end
   end
 end

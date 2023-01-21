@@ -1,22 +1,27 @@
 defmodule ExaultedRoller.Tables do
 
-  def create_or_join(uid: nil), do: create()
+  alias ExaultedRoller.Tables
+  alias ExaultedRoller.Tables.Table
 
-  def create_or_join(uid: ""), do: create()
-
-  def create_or_join(uid: uid) when is_binary(uid) do
-    %{uid: uid}  # %Table{}
-  end
-
+  @spec create() :: Table.t() | nil
   def create() do
-    %{uid: generate_uid()}
+    case Table.create(%{}) do
+      {:ok, table} ->
+        Tables.StorageWorker.create_table(table)
+
+      _ ->
+        nil
+    end
   end
 
-  @doc false
-  defp generate_uid() do
-    Ecto.UUID.generate()
-    |> String.split("-")
-    |> List.first()
-    |> String.upcase()
+  @spec join(uid: String.t()) :: Table.t() | nil
+  def join(uid: uid) do
+    case Tables.StorageWorker.get_table(uid) do
+      %Table{} = table ->
+        table
+
+      _ ->
+        nil
+    end
   end
 end

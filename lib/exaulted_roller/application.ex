@@ -15,9 +15,10 @@ defmodule ExaultedRoller.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: ExaultedRoller.PubSub},
       # Start the Endpoint (http/https)
-      ExaultedRollerWeb.Endpoint
+      ExaultedRollerWeb.Endpoint,
       # Start a worker by calling: ExaultedRoller.Worker.start_link(arg)
       # {ExaultedRoller.Worker, arg}
+      ExaultedRoller.Tables.StorageSupervisor
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
