@@ -14,6 +14,7 @@ defmodule ExaultedRoller.Application do
       # ExaultedRoller.Repo,
       # Start the PubSub system
       {Phoenix.PubSub, name: ExaultedRoller.PubSub},
+      ExaultedRollerWeb.Presence,
       # Start the Endpoint (http/https)
       ExaultedRollerWeb.Endpoint,
       # Start a worker by calling: ExaultedRoller.Worker.start_link(arg)
