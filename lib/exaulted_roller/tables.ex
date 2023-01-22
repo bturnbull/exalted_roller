@@ -24,4 +24,9 @@ defmodule ExaultedRoller.Tables do
         nil
     end
   end
+
+  @spec add_roll(Table.t(), []) :: Table.t() | nil
+  def add_roll(%Table{} = table, roll) when is_list(roll) do
+    Tables.StorageWorker.add_roll(table, roll)
+  end
 end
