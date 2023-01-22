@@ -2,6 +2,8 @@ defmodule ExaultedRoller.Tables do
 
   alias ExaultedRoller.Tables
   alias ExaultedRoller.Tables.Table
+  alias ExaultedRoller.Players.Player
+  alias ExaultedRoller.SuccessDicePool
 
   @spec create() :: Table.t() | nil
   def create() do
@@ -25,8 +27,8 @@ defmodule ExaultedRoller.Tables do
     end
   end
 
-  @spec add_roll(Table.t(), []) :: Table.t() | nil
-  def add_roll(%Table{} = table, roll) when is_list(roll) do
-    Tables.StorageWorker.add_roll(table, roll)
+  @spec add_roll(Table.t(), Player.t(), SuccessDicePool.t()) :: Table.t() | nil
+  def add_roll(%Table{} = table, %Player{} = player, %SuccessDicePool{} = pool) do
+    Tables.StorageWorker.add_roll(table, player, pool)
   end
 end

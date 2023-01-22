@@ -5,6 +5,9 @@ defmodule ExaultedRollerWeb.RollerLive do
 
   alias ExaultedRoller.Tables
   alias ExaultedRoller.Tables.Table
+  alias ExaultedRoller.SuccessDicePool
+
+  import ExaultedRollerWeb.RollerLive.SuccessDicePoolComponent
 
   @impl true
   def render(assigns) do
@@ -40,8 +43,8 @@ defmodule ExaultedRollerWeb.RollerLive do
           <%= player.name %>
         <% end %>
         Rolls:
-        <%= for roll <- @table.rolls || [] do %>
-          [ <%= for digit <- roll do %><%= digit %>, <% end %> ]
+        <%= for {player, roll} <- @table.rolls || [] do %>
+          <.success_dice_pool pool={ roll } character={ player.character } />
         <% end %>
       </pre>
     </div>
@@ -63,11 +66,11 @@ defmodule ExaultedRollerWeb.RollerLive do
 
   @impl true
   def handle_event("roll", %{"roll" => %{"dice_count" => dice_count}}, socket) do
-    dice_count = String.to_integer(dice_count)
+    dice =
+      String.to_integer(dice_count)
+      |> SuccessDicePool.create()
 
-    dice = for i <- 0..dice_count, i > 0, do: :rand.uniform(10)
-
-    case Tables.add_roll(socket.assigns.table, dice) do
+    case Tables.add_roll(socket.assigns.table, socket.assigns.player, dice) do
       %Table{} = table ->
         ExaultedRollerWeb.Endpoint.broadcast_from(self(), table_topic(socket), "roll_update", nil)
         {:noreply, assign(socket, :table, table)}

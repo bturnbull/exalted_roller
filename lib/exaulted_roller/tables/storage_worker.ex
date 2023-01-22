@@ -24,8 +24,8 @@ defmodule ExaultedRoller.Tables.StorageWorker do
     GenServer.call(__MODULE__, {:create_table, table})
   end
 
-  def add_roll(%Tables.Table{} = table, roll) do
-    GenServer.call(__MODULE__, {:add_roll, table, roll})
+  def add_roll(%Tables.Table{} = table, player, roll) do
+    GenServer.call(__MODULE__, {:add_roll, table, player, roll})
   end
 
   @impl true
@@ -67,12 +67,12 @@ defmodule ExaultedRoller.Tables.StorageWorker do
   end
 
   @impl true
-  def handle_call({:add_roll, table, roll}, _from, state) do
+  def handle_call({:add_roll, table, player, roll}, _from, state) do
     uid = table.uid
 
     case :ets.lookup(__MODULE__, uid) do
       [{^uid, table}] ->
-        table = %{table | rolls: [roll | table.rolls]}
+        table = %{table | rolls: [{player, roll} | table.rolls]}
         :ets.insert(__MODULE__, {table.uid, table})
 
         {:reply, table, state}
