@@ -28,25 +28,23 @@ defmodule ExaultedRollerWeb.RollerLive do
       >
         <.input field={{f, :dice_count}} type="text" label="Dice Count:" required />
         <:actions>
-          <.button phx-disable-with="Rolling ..." class="">
+          <.button phx-disable-with="Rolling ..." class="w-full">
             Roll <span aria-hidden="true">→</span>
           </.button>
         </:actions>
       </.simple_form>
 
-      <pre>
-        Player: <%= @player.name %>
-        Character: <%= @player.character %>
-        Table: <%= @table.uid %>
-        Players:
-        <%= for player <- @players do %>
-          <%= player.name %>
-        <% end %>
-        Rolls:
-        <%= for {player, roll} <- @table.rolls || [] do %>
-          <.success_dice_pool pool={ roll } character={ player.character } />
-        <% end %>
-      </pre>
+      <div class="pt-3">
+        <ul class="p-3">
+          <li><strong>Player:</strong> <%= @player.name %></li>
+          <li><strong>Character:</strong> <%= @player.character %></li>
+          <li><strong>Table:</strong> <%= @table.uid %></li>
+          <li><strong>Players:</strong> [ <%= for player <- @players do %><%= player.character %> <% end %>]</li>
+        </ul>
+        <div class="">
+          <%= for {player, roll} <- @table.rolls || [] do %><.success_dice_pool pool={ roll } character={ player.character } /><% end %>
+        </div>
+      </div>
     </div>
     """
   end
