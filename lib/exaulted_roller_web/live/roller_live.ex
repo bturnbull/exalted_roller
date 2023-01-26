@@ -27,6 +27,8 @@ defmodule ExaultedRollerWeb.RollerLive do
         phx-submit="roll"
       >
         <.input field={{f, :dice_count}} type="text" label="Dice Count:" required />
+        <.input field={{f, :stunt}} type="text" value="0" label="Stunt:" required />
+        <.input field={{f, :wound}} type="text" value="0" label="Wound:" required />
         <:actions>
           <.button phx-disable-with="Rolling ..." class="w-full">
             Roll <span aria-hidden="true">→</span>
@@ -63,12 +65,15 @@ defmodule ExaultedRollerWeb.RollerLive do
   end
 
   @impl true
-  def handle_event("roll", %{"roll" => %{"dice_count" => dice_count}}, socket) do
-    dice =
-      String.to_integer(dice_count)
-      |> SuccessDicePool.create()
+  def handle_event("roll", %{"roll" => %{"dice_count" => dice_count, "wound" => wound, "stunt" => stunt}}, socket) do
+    pool =
+      SuccessDicePool.create(
+        String.to_integer(dice_count),
+        stunt: String.to_integer(stunt),
+        wound: String.to_integer(wound)
+      )
 
-    case Tables.add_roll(socket.assigns.table, socket.assigns.player, dice) do
+    case Tables.add_roll(socket.assigns.table, socket.assigns.player, pool) do
       %Table{} = table ->
         ExaultedRollerWeb.Endpoint.broadcast_from(self(), table_topic(socket), "roll_update", nil)
         {:noreply, assign(socket, :table, table)}
