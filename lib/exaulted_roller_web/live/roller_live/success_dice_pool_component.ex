@@ -1,8 +1,8 @@
 defmodule ExaultedRollerWeb.RollerLive.SuccessDicePoolComponent do
   use Phoenix.Component
 
-  alias ExaultedRoller.SuccessDie
-  alias ExaultedRoller.SuccessDicePool
+  alias Exaulted.SuccessDie
+  alias Exaulted.SuccessDicePool
 
   def success_dice_pool(assigns) do
     ~H"""

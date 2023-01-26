@@ -1,4 +1,4 @@
-defmodule ExaultedRoller.SuccessDicePool do
+defmodule Exaulted.SuccessDicePool do
   @moduledoc """
   A pool of Exaulted 3E success dice.
   """
@@ -6,7 +6,7 @@ defmodule ExaultedRoller.SuccessDicePool do
   @default_success [7, 8, 9, 10]
   @default_double [10]
 
-  alias ExaultedRoller.SuccessDie
+  alias Exaulted.SuccessDie
 
   defstruct dice: [], success: @default_success, double: @default_double, stunt: 0, wound: 0
 

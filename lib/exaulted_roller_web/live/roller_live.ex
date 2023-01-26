@@ -3,9 +3,9 @@ defmodule ExaultedRollerWeb.RollerLive do
 
   require Logger
 
+  alias Exaulted.SuccessDicePool
   alias ExaultedRoller.Tables
   alias ExaultedRoller.Tables.Table
-  alias ExaultedRoller.SuccessDicePool
 
   import ExaultedRollerWeb.RollerLive.SuccessDicePoolComponent
 

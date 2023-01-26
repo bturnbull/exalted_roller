@@ -1,4 +1,4 @@
-defmodule ExaultedRoller.SuccessDie do
+defmodule Exaulted.SuccessDie do
   @moduledoc """
   An Exaulted 3E success die.
 

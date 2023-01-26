@@ -1,9 +1,9 @@
 defmodule ExaultedRoller.Tables do
 
+  alias Exaulted.SuccessDicePool
   alias ExaultedRoller.Tables
   alias ExaultedRoller.Tables.Table
   alias ExaultedRoller.Players.Player
-  alias ExaultedRoller.SuccessDicePool
 
   @spec create() :: Table.t() | nil
   def create() do
