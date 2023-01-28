@@ -16,8 +16,15 @@ defmodule ExaultedRoller.Tables do
     end
   end
 
-  @spec join(uid: String.t()) :: Table.t() | nil
-  def join(uid: uid) do
+  @spec fetch(Table.t()) :: Table.t() | nil
+  @spec fetch(String.t()) :: Table.t() | nil
+  def fetch(nil), do: nil
+
+  def fetch(%Table{uid: uid} = _table) do
+    fetch(uid)
+  end
+
+  def fetch(uid) do
     case Tables.StorageWorker.get_table(uid) do
       %Table{} = table ->
         table

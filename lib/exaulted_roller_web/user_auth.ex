@@ -21,7 +21,7 @@ defmodule ExaultedRollerWeb.UserAuth do
 
   def join_table(conn, %{"player_name" => player_name, "character_name" => character_name, "table_uid" => table_uid} = _params) do
     with %Player{} = player <- Players.create(name: player_name, character: character_name),
-         %Table{} = table <- Tables.join(uid: table_uid)
+         %Table{} = table <- Tables.fetch(table_uid)
     do
       conn
       |> put_session(:player, player)
@@ -56,7 +56,13 @@ defmodule ExaultedRollerWeb.UserAuth do
   Authenticates the table by looking into the session
   """
   def fetch_current_table(conn, _opts) do
-    assign(conn, :table, get_session(conn, :table))
+    case Tables.fetch(get_session(conn, :table)) do
+      %Table{} = table ->
+        assign(conn, :table, table)
+
+      _ ->
+        delete_session(conn, :table)
+    end
   end
 
   @doc """

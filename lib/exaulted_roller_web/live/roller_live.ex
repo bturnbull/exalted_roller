@@ -133,7 +133,7 @@ defmodule ExaultedRollerWeb.RollerLive do
 
   @impl true
   def handle_info(%{event: "roll_update"}, socket) do
-    case Tables.join(uid: socket.assigns.table.uid) do
+    case Tables.fetch(socket.assigns.table) do
       %Tables.Table{} = table ->
         {:noreply, assign(socket, :table, table)}
 
@@ -144,7 +144,7 @@ defmodule ExaultedRollerWeb.RollerLive do
 
   defp assign_table(%{} = socket) do
     socket
-    |> assign(:table, Tables.join(uid: socket.assigns.table.uid))
+    |> assign(:table, Tables.fetch(socket.assigns.table))
   end
 
   defp assign_players(%{} = socket) do
