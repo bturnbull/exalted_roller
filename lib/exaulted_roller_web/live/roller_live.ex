@@ -8,6 +8,7 @@ defmodule ExaultedRollerWeb.RollerLive do
   alias ExaultedRoller.Dice
 
   import ExaultedRollerWeb.RollerLive.SuccessDicePoolComponent
+  import ExaultedRollerWeb.RollerLive.AdjustmentComponent
 
   @impl true
   def render(assigns) do
@@ -27,12 +28,19 @@ defmodule ExaultedRollerWeb.RollerLive do
         phx-submit="roll"
       >
         <.input field={{f, :dice}} type="text" inputmode="numeric" pattern="[0-9]*" label="Dice Count:" required />
+        <.adjustment field="dice" type="rel" values={~w[-10 -1 +1 +10]} />
         <.input field={{f, :stunt}} type="text" inputmode="numeric" pattern="[0-9]*" label="Stunt:" />
+        <.adjustment field="stunt" type="abs" values={0..3} />
         <.input field={{f, :wound}} type="text" inputmode="numeric" pattern="[-0-9]*" label="Wound:" />
+        <.adjustment field="wound" type="abs" values={0..-4} />
         <.input field={{f, :success}} type="select" multiple={true} options={1..10} label="Success:" />
+        <.adjustment field="success" type="multi" values={1..10} />
         <.input field={{f, :double}} type="select" multiple={true} options={[{"Clear", nil}, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]} label="Double:" />
+        <.adjustment field="double" type="multi" values={1..10} clear={true} />
         <.input field={{f, :reroll_once}} type="select" multiple={true} options={[{"Clear", nil}, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]} label="Reroll Once:" />
+        <.adjustment field="reroll_once" type="multi" values={1..10} clear={true} />
         <.input field={{f, :reroll_none}} type="select" multiple={true} options={[{"Clear", nil}, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]} label="Reroll Until None:" />
+        <.adjustment field="reroll_none" type="multi" values={1..10} clear={true} />
         <:actions>
           <.button phx-disable-with="Rolling ..." class="w-full">
             Roll <span aria-hidden="true">→</span>
@@ -123,6 +131,84 @@ defmodule ExaultedRollerWeb.RollerLive do
 
       {:error, changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
+    end
+  end
+
+  @impl true
+  def handle_event("adjustment", %{"field" => field, "type" => type, "value" => value}, %{assigns: %{dice_pool: dice_pool}} = socket) do
+    with {value, _} <- Integer.parse(value),
+         true <- Enum.any?(["dice", "stunt", "wound", "success", "double", "reroll_once", "reroll_none"], &(&1 == field)),
+         true <- Enum.any?(["rel", "abs", "multi"], &(&1 == type)),
+         field <- String.to_atom(field),
+         type <- String.to_atom(type)
+    do
+      value = apply_adjustment(type, field, value, dice_pool)
+
+      changeset =
+        dice_pool
+        |> Dice.SuccessDicePool.changeset(Map.put(%{}, field, value))
+        |> Map.put(:action, :validate)
+
+      if changeset.valid? do
+        {
+          :noreply,
+          socket
+          |> assign(:dice_pool, Map.put(dice_pool, field, value))
+          |> assign(:changeset, changeset)
+        }
+      else
+        {:noreply, socket}
+      end
+    else
+      _ ->
+        {:noreply, socket}
+    end
+  end
+
+  def handle_event("clear", %{"field" => field, "type" => "multi"}, %{assigns: %{dice_pool: dice_pool}} = socket) do
+    with true <- Enum.any?(["dice", "stunt", "wound", "success", "double", "reroll_once", "reroll_none"], &(&1 == field)),
+         field <- String.to_atom(field)
+    do
+      changeset =
+        dice_pool
+        |> Dice.SuccessDicePool.changeset(Map.put(%{}, field, [nil]))
+        |> Map.put(:action, :validate)
+
+      dice_pool = Map.put(dice_pool, field, [nil])
+
+      {
+        :noreply,
+        socket
+        |> assign(:dice_pool, dice_pool)
+        |> assign(:changeset, changeset)
+      }
+    else
+      _ ->
+        {:noreply, socket}
+    end
+  end
+
+  defp apply_adjustment(:abs, _field, value, _dice_pool) do
+    value
+  end
+
+  defp apply_adjustment(:rel, field, value, dice_pool) do
+    Map.get(dice_pool, field) + value
+  end
+
+  defp apply_adjustment(:multi, _field, 0, _dice_pool) do
+    []
+  end
+
+  defp apply_adjustment(:multi, field, value, dice_pool) do
+    current = Map.get(dice_pool, field, [])
+
+    if Enum.any?(current, &(&1 == value)) do
+      List.delete(current, value)
+    else
+      List.insert_at(current, -1, value)
+      |> Enum.sort()
+      |> Enum.uniq()
     end
   end
 
