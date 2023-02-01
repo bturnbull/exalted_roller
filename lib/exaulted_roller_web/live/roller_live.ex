@@ -20,6 +20,9 @@ defmodule ExaultedRollerWeb.RollerLive do
           <.link href={~p"/leave"} method="delete">Leave Table</.link>
         </:subtitle>
       </.header>
+      <div class="">
+        <.success_dice_pool pool={@players_roll} character={@player.character} />
+      </div>
       <.simple_form
         :let={f}
         id="roll-form"
@@ -75,6 +78,7 @@ defmodule ExaultedRollerWeb.RollerLive do
       |> assign_players()
       |> assign_dice_pool()
       |> assign_changeset()
+      |> assign_players_roll()
     }
   end
 
@@ -123,7 +127,12 @@ defmodule ExaultedRollerWeb.RollerLive do
         case Tables.add_roll(socket.assigns.table, socket.assigns.player, pool) do
           %Tables.Table{} = table ->
             ExaultedRollerWeb.Endpoint.broadcast_from(self(), table_topic(socket), "roll_update", nil)
-            {:noreply, assign(socket, :table, table)}
+            {
+              :noreply,
+              socket
+              |> assign(:table, table)
+              |> assign(:players_roll, pool)
+            }
 
           _ ->
             {:noreply, socket}
@@ -251,6 +260,11 @@ defmodule ExaultedRollerWeb.RollerLive do
   defp assign_changeset(%{} = socket) do
     socket
     |> assign(:changeset, Dice.SuccessDicePool.changeset(%Dice.SuccessDicePool{}, %{}))
+  end
+
+  defp assign_players_roll(%{} = socket) do
+    socket
+    |> assign(:players_roll, Tables.get_latest_roll(socket.assigns.table, socket.assigns.player))
   end
 
   defp table_topic(socket) do

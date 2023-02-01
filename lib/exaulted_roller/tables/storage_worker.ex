@@ -2,7 +2,6 @@ defmodule ExaultedRoller.Tables.StorageWorker do
   use GenServer
 
   alias ExaultedRoller.Tables
-  alias ExaultedRoller.Players
 
   def start_link(args \\ []) do
     GenServer.start_link(__MODULE__, args, name: __MODULE__)
@@ -26,6 +25,10 @@ defmodule ExaultedRoller.Tables.StorageWorker do
 
   def add_roll(%Tables.Table{} = table, player, roll) do
     GenServer.call(__MODULE__, {:add_roll, table, player, roll})
+  end
+
+  def get_latest_roll(%Tables.Table{} = table, player) do
+    GenServer.call(__MODULE__, {:get_latest_roll, table, player})
   end
 
   @impl true
@@ -79,6 +82,29 @@ defmodule ExaultedRoller.Tables.StorageWorker do
 
       [] ->
         {:reply, nil, state}
+    end
+  end
+
+  @impl true
+  def handle_call({:get_latest_roll, table, player}, _from, state) do
+    uid = table.uid
+
+    case :ets.lookup(__MODULE__, uid) do
+      [{^uid, table}] ->
+        {:reply, latest_roll(table, player), state}
+
+      _ ->
+        {:reply, nil, state}
+    end
+  end
+
+  defp latest_roll(table, player) do
+    case Enum.find(table.rolls, [], fn {p, _} -> p == player end) do
+      {_, roll} ->
+        roll
+
+      _ ->
+        nil
     end
   end
 end

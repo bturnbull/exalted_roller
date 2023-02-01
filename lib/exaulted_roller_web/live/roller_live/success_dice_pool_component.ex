@@ -4,6 +4,21 @@ defmodule ExaultedRollerWeb.RollerLive.SuccessDicePoolComponent do
   alias Exaulted.SuccessDie
   alias Exaulted.SuccessDicePool
 
+  def success_dice_pool(%{pool: nil} = assigns) do
+    ~H"""
+    <div class="p-3 bg-slate-200 odd:bg-slate-100">
+      <div>
+        <strong><%= @character %>:</strong>
+        <span class={success_string_class(nil)}>&mdash;</span>
+      </div>
+      <div><strong>Roll:</strong> &mdash;</div>
+      <div>
+        &mdash; / &mdash; / &mdash; / &mdash; / &mdash;
+      </div>
+    </div>
+    """
+  end
+
   def success_dice_pool(assigns) do
     ~H"""
     <div class="p-3 bg-slate-200 odd:bg-slate-100">
@@ -76,6 +91,10 @@ defmodule ExaultedRollerWeb.RollerLive.SuccessDicePoolComponent do
       {count, _} ->
         "#{count} Successes"
     end
+  end
+
+  defp success_string_class(nil) do
+    ""
   end
 
   defp success_string_class(pool) do

@@ -38,4 +38,9 @@ defmodule ExaultedRoller.Tables do
   def add_roll(%Table{} = table, %Player{} = player, %SuccessDicePool{} = pool) do
     Tables.StorageWorker.add_roll(table, player, pool)
   end
+
+  @spec get_latest_roll(Table.t(), Player.t()) :: SuccessDicePool.t() | nil
+  def get_latest_roll(%Table{} = table, %Player{} = player) do
+    Tables.StorageWorker.get_latest_roll(table, player)
+  end
 end
