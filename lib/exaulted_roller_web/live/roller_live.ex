@@ -13,7 +13,7 @@ defmodule ExaultedRollerWeb.RollerLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-sm">
+    <div class="mx-auto max-w-xl">
       <.header class="text-center">
         Roller!
         <:subtitle>
@@ -33,17 +33,17 @@ defmodule ExaultedRollerWeb.RollerLive do
         <.input field={{f, :dice}} type="text" inputmode="numeric" pattern="[0-9]*" label="Dice Count:" required />
         <.adjustment field="dice" type="rel" values={~w[-10 -1 +1 +10]} />
         <.input field={{f, :stunt}} type="text" inputmode="numeric" pattern="[0-9]*" label="Stunt:" />
-        <.adjustment field="stunt" type="abs" values={0..3} />
+        <.adjustment field="stunt" type="abs" values={0..3} selected={[@dice_pool.stunt]} />
         <.input field={{f, :wound}} type="text" inputmode="numeric" pattern="[-0-9]*" label="Wound:" />
-        <.adjustment field="wound" type="abs" values={0..-4} />
+        <.adjustment field="wound" type="abs" values={0..-4} selected={[@dice_pool.wound]} />
         <.input field={{f, :success}} type="select" multiple={true} options={1..10} label="Success:" />
-        <.adjustment field="success" type="multi" values={1..10} />
+        <.adjustment field="success" type="multi" values={1..10} selected={@dice_pool.success} />
         <.input field={{f, :double}} type="select" multiple={true} options={[{"Clear", nil}, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]} label="Double:" />
-        <.adjustment field="double" type="multi" values={1..10} clear={true} />
+        <.adjustment field="double" type="multi" values={1..10} clear={true} selected={@dice_pool.double} />
         <.input field={{f, :reroll_once}} type="select" multiple={true} options={[{"Clear", nil}, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]} label="Reroll Once:" />
-        <.adjustment field="reroll_once" type="multi" values={1..10} clear={true} />
+        <.adjustment field="reroll_once" type="multi" values={1..10} clear={true} selected={@dice_pool.reroll_once} />
         <.input field={{f, :reroll_none}} type="select" multiple={true} options={[{"Clear", nil}, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]} label="Reroll Until None:" />
-        <.adjustment field="reroll_none" type="multi" values={1..10} clear={true} />
+        <.adjustment field="reroll_none" type="multi" values={1..10} clear={true} selected={@dice_pool.reroll_none} />
         <:actions>
           <.button phx-disable-with="Rolling ..." class="w-full">
             Roll <span aria-hidden="true">→</span>
@@ -93,21 +93,14 @@ defmodule ExaultedRollerWeb.RollerLive do
   end
 
   @impl true
-  def handle_event("validate", params, socket) do
-    Logger.debug("params = #{inspect params}")
-    Logger.debug("socket.assigns = #{inspect socket.assigns}")
-
+  def handle_event("validate", _params, socket) do
     {:noreply, socket}
   end
 
   @impl true
   def handle_event("roll", %{"success_dice_pool" => dice_pool_params}, socket) do
-    Logger.debug("dice_pool_params = #{inspect dice_pool_params}")
-
     case Dice.SuccessDicePool.create(dice_pool_params) do
       {:ok, pool} ->
-        Logger.debug("pool = #{inspect pool}")
-
         count = Map.get(pool, :dice)
         once_range = Map.get(pool, :reroll_once)
         until_none_range = Map.get(pool, :reroll_none)
@@ -121,8 +114,6 @@ defmodule ExaultedRollerWeb.RollerLive do
           SuccessDicePool.create(count, Map.to_list(attrs))
           |> SuccessDicePool.reroll(once_range, :once)
           |> SuccessDicePool.reroll(until_none_range, :until_none)
-
-        Logger.debug("pool = #{inspect pool}")
 
         case Tables.add_roll(socket.assigns.table, socket.assigns.player, pool) do
           %Tables.Table{} = table ->
