@@ -6,7 +6,7 @@ defmodule ExaultedRollerWeb.RollerLive.SuccessDicePoolComponent do
 
   def success_dice_pool(%{pool: nil} = assigns) do
     ~H"""
-    <div class="p-3 bg-slate-200 odd:bg-slate-100">
+    <div class="p-3 bg-slate-100 odd:bg-slate-200">
       <div>
         <strong><%= @character %>:</strong>
         <span class={success_string_class(nil)}>&mdash;</span>

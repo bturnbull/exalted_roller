@@ -1,6 +1,7 @@
 defmodule ExaultedRollerWeb.RollerLive.AdjustmentComponent do
   use Phoenix.Component
 
+  attr :label, :string, default: nil
   attr :field, :string, required: true
   attr :type, :string, required: true
   attr :values, :list, required: true
@@ -10,6 +11,7 @@ defmodule ExaultedRollerWeb.RollerLive.AdjustmentComponent do
   def adjustment(assigns) do
     ~H"""
     <div class={grid_div_container_class(assigns)}>
+    <%= if @label do %><span class="flex items-center pl-2 pb-1 gap-4 text-sm leading-6 font-bold text-zinc-700"><%= @label %></span><% end %>
       <%= if @clear do %><a href="#" phx-click="clear" phx-value-field={@field} phx-value-type={@type}><div class={grid_div_button_class(assigns, nil, @selected)}>None</div></a>
         <% end %>
         <%= for value <- @values do %><a href="#" phx-click="adjustment" phx-value-field={@field} phx-value-type={@type} phx-value-value={value}><div class={grid_div_button_class(assigns, value, @selected)}><%= value %></div></a>
