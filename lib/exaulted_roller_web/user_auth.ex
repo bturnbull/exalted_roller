@@ -25,7 +25,7 @@ defmodule ExaultedRollerWeb.UserAuth do
     do
       conn
       |> put_session(:player, player)
-      |> put_session(:table, table)
+      |> put_session(:table_uid, table.uid)
       |> redirect(to: signed_in_path(conn))
     else
       _ ->
@@ -41,7 +41,7 @@ defmodule ExaultedRollerWeb.UserAuth do
 
   def leave_table(conn, _params) do
     conn
-    |> delete_session(:table)
+    |> delete_session(:table_uid)
     |> redirect(to: join_path(conn))
   end
 
@@ -56,12 +56,12 @@ defmodule ExaultedRollerWeb.UserAuth do
   Authenticates the table by looking into the session
   """
   def fetch_current_table(conn, _opts) do
-    case Tables.fetch(get_session(conn, :table)) do
+    case Tables.fetch(get_session(conn, :table_uid)) do
       %Table{} = table ->
         assign(conn, :table, table)
 
       _ ->
-        delete_session(conn, :table)
+        delete_session(conn, :table_uid)
     end
   end
 
@@ -121,18 +121,24 @@ defmodule ExaultedRollerWeb.UserAuth do
     end
   end
 
-  defp mount_player_and_table(session, socket) do
-    case session do
-      %{"player" => player, "table" => table} ->
+  defp mount_player_and_table(%{"player" => player, "table_uid" => table_uid} = _session, socket) do
+    case Tables.fetch(table_uid) do
+      %Table{} = table ->
         socket
         |> Phoenix.Component.assign_new(:table, fn -> table end)
         |> Phoenix.Component.assign_new(:player, fn -> player end)
 
-      %{} ->
+      _ ->
         socket
         |> Phoenix.Component.assign_new(:table, fn -> nil end)
-        |> Phoenix.Component.assign_new(:player, fn -> nil end)
+        |> Phoenix.Component.assign_new(:player, fn -> player end)
     end
+  end
+
+  defp mount_player_and_table(_session, socket) do
+    socket
+    |> Phoenix.Component.assign_new(:table, fn -> nil end)
+    |> Phoenix.Component.assign_new(:player, fn -> nil end)
   end
 
   @doc """
