@@ -1,14 +1,14 @@
-defmodule ExaultedRollerWeb.RollerLive do
-  use ExaultedRollerWeb, :live_view
+defmodule ExaltedRollerWeb.RollerLive do
+  use ExaltedRollerWeb, :live_view
 
   require Logger
 
-  alias Exaulted.SuccessDicePool
-  alias ExaultedRoller.Tables
-  alias ExaultedRoller.Dice
+  alias Exalted.SuccessDicePool
+  alias ExaltedRoller.Tables
+  alias ExaltedRoller.Dice
 
-  import ExaultedRollerWeb.RollerLive.SuccessDicePoolComponent
-  import ExaultedRollerWeb.RollerLive.AdjustmentComponent
+  import ExaltedRollerWeb.RollerLive.SuccessDicePoolComponent
+  import ExaltedRollerWeb.RollerLive.AdjustmentComponent
 
   @impl true
   def render(assigns) do
@@ -79,8 +79,8 @@ defmodule ExaultedRollerWeb.RollerLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    ExaultedRollerWeb.Presence.track(self(), table_topic(socket), :player, socket.assigns.player)
-    ExaultedRollerWeb.Endpoint.subscribe(table_topic(socket))
+    ExaltedRollerWeb.Presence.track(self(), table_topic(socket), :player, socket.assigns.player)
+    ExaltedRollerWeb.Endpoint.subscribe(table_topic(socket))
 
     {
       :ok,
@@ -128,7 +128,7 @@ defmodule ExaultedRollerWeb.RollerLive do
 
         case Tables.add_roll(socket.assigns.table, socket.assigns.player, pool) do
           %Tables.Table{} = table ->
-            ExaultedRollerWeb.Endpoint.broadcast_from(self(), table_topic(socket), "roll_update", nil)
+            ExaltedRollerWeb.Endpoint.broadcast_from(self(), table_topic(socket), "roll_update", nil)
             {
               :noreply,
               socket
@@ -277,7 +277,7 @@ defmodule ExaultedRollerWeb.RollerLive do
   # session's player first.
   defp table_players(socket) do
     table_topic(socket)
-    |> ExaultedRollerWeb.Presence.list()
+    |> ExaltedRollerWeb.Presence.list()
     |> Enum.map(fn {_, data} -> data[:metas] end)
     |> List.first()
     |> Enum.sort_by(& &1.character, :asc)

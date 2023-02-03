@@ -1,4 +1,4 @@
-defmodule ExaultedRollerWeb.CoreComponents do
+defmodule ExaltedRollerWeb.CoreComponents do
   @moduledoc """
   Provides core UI components.
 
@@ -599,9 +599,9 @@ defmodule ExaultedRollerWeb.CoreComponents do
     # uncommenting and adjusting the following code:
 
     # if count = opts[:count] do
-    #   Gettext.dngettext(ExaultedRollerWeb.Gettext, "errors", msg, msg, count, opts)
+    #   Gettext.dngettext(ExaltedRollerWeb.Gettext, "errors", msg, msg, count, opts)
     # else
-    #   Gettext.dgettext(ExaultedRollerWeb.Gettext, "errors", msg, opts)
+    #   Gettext.dgettext(ExaltedRollerWeb.Gettext, "errors", msg, opts)
     # end
 
     Enum.reduce(opts, msg, fn {key, value}, acc ->

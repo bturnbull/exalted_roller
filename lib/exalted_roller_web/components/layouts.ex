@@ -1,5 +1,5 @@
-defmodule ExaultedRollerWeb.Layouts do
-  use ExaultedRollerWeb, :html
+defmodule ExaltedRollerWeb.Layouts do
+  use ExaltedRollerWeb, :html
 
   embed_templates "layouts/*"
 end

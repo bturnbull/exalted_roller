@@ -1,5 +1,5 @@
-defmodule ExaultedRollerWeb.PageControllerTest do
-  use ExaultedRollerWeb.ConnCase
+defmodule ExaltedRollerWeb.PageControllerTest do
+  use ExaltedRollerWeb.ConnCase
 
   test "GET /", %{conn: conn} do
     conn = get(conn, ~p"/")

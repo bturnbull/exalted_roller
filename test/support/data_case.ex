@@ -1,4 +1,4 @@
-defmodule ExaultedRoller.DataCase do
+defmodule ExaltedRoller.DataCase do
   @moduledoc """
   This module defines the setup for tests requiring
   access to the application's data layer.
@@ -10,7 +10,7 @@ defmodule ExaultedRoller.DataCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use ExaultedRoller.DataCase, async: true`, although
+  by setting `use ExaltedRoller.DataCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -18,17 +18,17 @@ defmodule ExaultedRoller.DataCase do
 
   using do
     quote do
-      alias ExaultedRoller.Repo
+      alias ExaltedRoller.Repo
 
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import ExaultedRoller.DataCase
+      import ExaltedRoller.DataCase
     end
   end
 
   setup tags do
-    ExaultedRoller.DataCase.setup_sandbox(tags)
+    ExaltedRoller.DataCase.setup_sandbox(tags)
     :ok
   end
 
@@ -36,7 +36,7 @@ defmodule ExaultedRoller.DataCase do
   Sets up the sandbox based on the test tags.
   """
   def setup_sandbox(tags) do
-    pid = Ecto.Adapters.SQL.Sandbox.start_owner!(ExaultedRoller.Repo, shared: not tags[:async])
+    pid = Ecto.Adapters.SQL.Sandbox.start_owner!(ExaltedRoller.Repo, shared: not tags[:async])
     on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
   end
 

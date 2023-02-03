@@ -1,4 +1,4 @@
-defmodule ExaultedRoller.Players.Player do
+defmodule ExaltedRoller.Players.Player do
   defstruct name: nil, character: nil
   @type t :: %__MODULE__{name: String.t() | nil, character: String.t() | nil}
 

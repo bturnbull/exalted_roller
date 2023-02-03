@@ -1,7 +1,7 @@
-defmodule ExaultedRoller.Tables.StorageSupervisor do
+defmodule ExaltedRoller.Tables.StorageSupervisor do
   use Supervisor
 
-  alias ExaultedRoller.Tables
+  alias ExaltedRoller.Tables
 
   def start_link(args \\ []) do
     Supervisor.start_link(__MODULE__, args, name: __MODULE__)

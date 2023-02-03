@@ -1,4 +1,4 @@
-defmodule ExaultedRollerWeb.RollerLive.AdjustmentComponent do
+defmodule ExaltedRollerWeb.RollerLive.AdjustmentComponent do
   use Phoenix.Component
 
   attr :label, :string, default: nil

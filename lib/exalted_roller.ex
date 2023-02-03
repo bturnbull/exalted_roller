@@ -1,6 +1,6 @@
-defmodule ExaultedRoller do
+defmodule ExaltedRoller do
   @moduledoc """
-  ExaultedRoller keeps the contexts that define your domain
+  ExaltedRoller keeps the contexts that define your domain
   and business logic.
 
   Contexts are also responsible for managing your data, regardless

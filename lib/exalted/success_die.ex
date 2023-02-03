@@ -1,6 +1,6 @@
-defmodule Exaulted.SuccessDie do
+defmodule Exalted.SuccessDie do
   @moduledoc """
-  An Exaulted 3E success die.
+  An Exalted 3E success die.
 
   Can be rolled multiple times maintaining a history of all rolls.  Prevent
   further rolls from modifying the die using `freeze\0`.
@@ -17,14 +17,14 @@ defmodule Exaulted.SuccessDie do
         }
 
   @doc """
-  Create a new `ExaultedRoller.SuccessDie` struct and roll it with reason "Initial".
+  Create a new `ExaltedRoller.SuccessDie` struct and roll it with reason "Initial".
 
-  Returns `%ExaultedRoller.SuccessDie{}`.
+  Returns `%ExaltedRoller.SuccessDie{}`.
 
   ## Examples
 
-      iex> die = ExaultedRoller.SuccessDie.create()
-      %ExaultedRoller.SuccessDie{value: 1, history: [{1, "Initial"}], frozen: false}
+      iex> die = ExaltedRoller.SuccessDie.create()
+      %ExaltedRoller.SuccessDie{value: 1, history: [{1, "Initial"}], frozen: false}
 
   """
   @spec create() :: __MODULE__.t()
@@ -34,17 +34,17 @@ defmodule Exaulted.SuccessDie do
   end
 
   @doc """
-  Roll an `ExaultedRoller.SuccessDie` struct replacing the current value.
+  Roll an `ExaltedRoller.SuccessDie` struct replacing the current value.
 
   If `freeze/0` has been called, will return the current struct unmodified.
 
-  Returns `%ExaultedRoller.SuccessDie{}`
+  Returns `%ExaltedRoller.SuccessDie{}`
 
   ## Examples
 
-      iex> ExaultedRoller.SuccessDie.create()
-      ...> |> ExaultedRoller.SuccessDie.roll("Reroll")
-      %ExaultedRoller.SuccessDie{value: 4, history: [{4, "Reroll"}, {1, "Initial"}, frozen: false}
+      iex> ExaltedRoller.SuccessDie.create()
+      ...> |> ExaltedRoller.SuccessDie.roll("Reroll")
+      %ExaltedRoller.SuccessDie{value: 4, history: [{4, "Reroll"}, {1, "Initial"}, frozen: false}
 
   """
   @spec roll(__MODULE__.t(), String.t()) :: __MODULE__.t()
@@ -58,16 +58,16 @@ defmodule Exaulted.SuccessDie do
   end
 
   @doc """
-  Freeze an `ExaultedRoller.SuccessDie` struct to prevent it being rolled.
+  Freeze an `ExaltedRoller.SuccessDie` struct to prevent it being rolled.
 
-  Returns `%ExaultedRoller.SuccessDie{}`
+  Returns `%ExaltedRoller.SuccessDie{}`
 
   ## Examples
 
-      iex> ExaultedRoller.SuccessDie.create()
-      ...> |> ExaultedRoller.SuccessDie.freeze()
-      ...> |> ExaultedRoller.SuccessDie.roll("Reroll")
-      %ExaultedRoller.SuccessDie{value: 1, history: [{1, "Initial"}], frozen: true}
+      iex> ExaltedRoller.SuccessDie.create()
+      ...> |> ExaltedRoller.SuccessDie.freeze()
+      ...> |> ExaltedRoller.SuccessDie.roll("Reroll")
+      %ExaltedRoller.SuccessDie{value: 1, history: [{1, "Initial"}], frozen: true}
 
   """
   @spec freeze(__MODULE__.t()) :: __MODULE__.t()

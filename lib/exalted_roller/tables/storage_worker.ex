@@ -1,7 +1,7 @@
-defmodule ExaultedRoller.Tables.StorageWorker do
+defmodule ExaltedRoller.Tables.StorageWorker do
   use GenServer
 
-  alias ExaultedRoller.Tables
+  alias ExaltedRoller.Tables
 
   def start_link(args \\ []) do
     GenServer.start_link(__MODULE__, args, name: __MODULE__)

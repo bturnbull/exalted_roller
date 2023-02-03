@@ -1,4 +1,4 @@
-defmodule ExaultedRollerWeb.ConnCase do
+defmodule ExaltedRollerWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -11,7 +11,7 @@ defmodule ExaultedRollerWeb.ConnCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use ExaultedRollerWeb.ConnCase, async: true`, although
+  by setting `use ExaltedRollerWeb.ConnCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -20,19 +20,19 @@ defmodule ExaultedRollerWeb.ConnCase do
   using do
     quote do
       # The default endpoint for testing
-      @endpoint ExaultedRollerWeb.Endpoint
+      @endpoint ExaltedRollerWeb.Endpoint
 
-      use ExaultedRollerWeb, :verified_routes
+      use ExaltedRollerWeb, :verified_routes
 
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
-      import ExaultedRollerWeb.ConnCase
+      import ExaltedRollerWeb.ConnCase
     end
   end
 
   setup tags do
-    ExaultedRoller.DataCase.setup_sandbox(tags)
+    ExaltedRoller.DataCase.setup_sandbox(tags)
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 end

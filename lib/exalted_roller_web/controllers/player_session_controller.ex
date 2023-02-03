@@ -1,7 +1,7 @@
-defmodule ExaultedRollerWeb.PlayerSessionController do
-  use ExaultedRollerWeb, :controller
+defmodule ExaltedRollerWeb.PlayerSessionController do
+  use ExaltedRollerWeb, :controller
 
-  alias ExaultedRollerWeb.UserAuth
+  alias ExaltedRollerWeb.UserAuth
 
   def create(conn, %{"table" => table_params} = _param) do
     UserAuth.join_table(conn, table_params)

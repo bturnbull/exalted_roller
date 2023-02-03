@@ -1,4 +1,4 @@
-defmodule ExaultedRoller.Tables.Table do
+defmodule ExaltedRoller.Tables.Table do
   defstruct uid: nil, rolls: []
   @type t :: %__MODULE__{uid: String.t() | nil, rolls: []}
 
