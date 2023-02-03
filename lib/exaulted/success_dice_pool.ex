@@ -8,10 +8,11 @@ defmodule Exaulted.SuccessDicePool do
 
   alias Exaulted.SuccessDie
 
-  defstruct dice: [], success: @default_success, double: @default_double, stunt: 0, wound: 0
+  defstruct dice: [], label: nil, success: @default_success, double: @default_double, stunt: 0, wound: 0
 
   @type t :: %__MODULE__{
           dice: [SuccessDie.t()],
+          label: String.t() | nil,
           success: [1..10],
           double: [1..10],
           stunt: 0..3,

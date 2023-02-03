@@ -1,6 +1,6 @@
 defmodule ExaultedRoller.Dice.SuccessDicePool do
-  defstruct dice: 1, success: [7, 8, 9, 10], double: [10], stunt: 0, wound: 0, reroll_once: [], reroll_none: []
-  @type t :: %__MODULE__{dice: pos_integer | nil, success: [1..10], double: [1..10], stunt: 0..3, wound: -4..0, reroll_once: [1..10], reroll_none: [1..10]}
+  defstruct dice: 1, label: nil, success: [7, 8, 9, 10], double: [10], stunt: 0, wound: 0, reroll_once: [], reroll_none: []
+  @type t :: %__MODULE__{dice: pos_integer | nil, label: String.t() | nil, success: [1..10], double: [1..10], stunt: 0..3, wound: -4..0, reroll_once: [1..10], reroll_none: [1..10]}
 
   import Ecto.Changeset
 
@@ -13,8 +13,8 @@ defmodule ExaultedRoller.Dice.SuccessDicePool do
 
   @spec changeset(__MODULE__.t(), Map.t()) :: Ecto.Changeset.t()
   def changeset(%__MODULE__{} = table, attrs) do
-    {table, %{dice: :integer, success: {:array, :integer}, double: {:array, :integer}, stunt: :integer, wound: :integer, reroll_once: {:array, :integer}, reroll_none: {:array, :integer}}}
-    |> cast(attrs, [:dice, :success, :double, :stunt, :wound, :reroll_once, :reroll_none ])
+    {table, %{dice: :integer, label: :string, success: {:array, :integer}, double: {:array, :integer}, stunt: :integer, wound: :integer, reroll_once: {:array, :integer}, reroll_none: {:array, :integer}}}
+    |> cast(attrs, [:dice, :label, :success, :double, :stunt, :wound, :reroll_once, :reroll_none ])
     |> validate_required([:dice])
     |> validate_number(:dice, greater_than: 0)
     |> validate_inclusion(:stunt, 0..3, message: "must be 0 through 3")

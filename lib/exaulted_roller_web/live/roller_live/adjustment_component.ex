@@ -21,7 +21,7 @@ defmodule ExaultedRollerWeb.RollerLive.AdjustmentComponent do
   end
 
   defp grid_div_container_class(assigns) do
-    "w-full columns-#{count(assigns)} space-x-2 rounded-xl bg-gray-200 p-2"
+    "w-full columns-#{count(assigns)} space-x-1 rounded-xl px-2 pb-2 pt-1"
   end
 
   defp grid_div_button_class(_assigns, nil, []) do

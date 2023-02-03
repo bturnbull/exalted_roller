@@ -24,20 +24,38 @@ defmodule ExaultedRollerWeb.RollerLive do
         phx-change="validate"
         phx-submit="roll"
       >
-        <.input field={{f, :dice}} type="text" inputmode="numeric" pattern="[0-9]*" label="Dice Count:" required />
-        <.adjustment field="dice" type="rel" values={~w[-10 -1 +1 +10]} />
-        <span class="hidden"><.input field={{f, :stunt}} type="text" inputmode="numeric" pattern="[0-9]*" label="Stunt:" /></span>
-        <.adjustment label="Stunt:" field="stunt" type="abs" values={0..3} selected={[@dice_pool.stunt]} />
-        <span class="hidden"><.input field={{f, :wound}} type="text" inputmode="numeric" pattern="[-0-9]*" label="Wound:" /></span>
-        <.adjustment label="Wound:" field="wound" type="abs" values={0..-4} selected={[@dice_pool.wound]} />
-        <span class="hidden"><.input field={{f, :success}} type="select" multiple={true} options={1..10} label="Success:" /></span>
-        <.adjustment label="Success:" field="success" type="multi" values={1..10} selected={@dice_pool.success} />
-        <span class="hidden"><.input field={{f, :double}} type="select" multiple={true} options={[{"Clear", nil}, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]} label="Double:" /></span>
-        <.adjustment label="Double:" field="double" type="multi" values={1..10} clear={true} selected={@dice_pool.double} />
-        <span class="hidden"><.input field={{f, :reroll_once}} type="select" multiple={true} options={[{"Clear", nil}, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]} label="Reroll Once:" /></span>
-        <.adjustment label="Reroll Once:" field="reroll_once" type="multi" values={1..10} clear={true} selected={@dice_pool.reroll_once} />
-        <span class="hidden"><.input field={{f, :reroll_none}} type="select" multiple={true} options={[{"Clear", nil}, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]} label="Reroll Until None:" /></span>
-        <.adjustment label="Reroll Until None:" field="reroll_none" type="multi" values={1..10} clear={true} selected={@dice_pool.reroll_none} />
+        <div class="grid grid-cols-4 gap-2 rounded-xl px-2 bg-zinc-100">
+          <div class="">
+            <.input field={{f, :dice}} type="text" inputmode="numeric" pattern="[0-9]*" required /></div>
+          <div class="col-span-2 pt-[5px]"><.adjustment field="dice" type="rel" values={~w[-10 -1 +1 +10]} /></div>
+          <div class="pt-1"><.input field={{f, :label}} type="select" prompt="Roll Label" options={["Withering", "Decisive", "Withering Damage", "Decisive Damage", "Reroll", "Cascade", "Social", "Sorcery", "Sidekick", "Join Battle"]} /></div>
+        </div>
+        <div class="grid grid-cols-2 gap-2 rounded-xl bg-zinc-100">
+          <div class="">
+            <span class="hidden"><.input field={{f, :stunt}} type="text" inputmode="numeric" pattern="[0-9]*" label="Stunt:" /></span>
+            <.adjustment label="Stunt:" field="stunt" type="abs" values={0..3} selected={[@dice_pool.stunt]} />
+          </div>
+          <div class="">
+            <span class="hidden"><.input field={{f, :wound}} type="text" inputmode="numeric" pattern="[-0-9]*" label="Wound:" /></span>
+            <.adjustment label="Wound:" field="wound" type="abs" values={0..-4} selected={[@dice_pool.wound]} />
+          </div>
+        </div>
+        <div class="grid rounded-xl bg-zinc-100">
+          <span class="hidden"><.input field={{f, :success}} type="select" multiple={true} options={1..10} label="Success:" /></span>
+          <.adjustment label="Success:" field="success" type="multi" values={1..10} selected={@dice_pool.success} />
+        </div>
+        <div class="grid gap-2 rounded-xl bg-zinc-100">
+          <span class="hidden"><.input field={{f, :double}} type="select" multiple={true} options={[{"Clear", nil}, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]} label="Double:" /></span>
+          <.adjustment label="Double:" field="double" type="multi" values={1..10} clear={true} selected={@dice_pool.double} />
+        </div>
+        <div class="grid rounded-xl bg-zinc-100">
+          <span class="hidden"><.input field={{f, :reroll_once}} type="select" multiple={true} options={[{"Clear", nil}, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]} label="Reroll Once:" /></span>
+          <.adjustment label="Reroll Once:" field="reroll_once" type="multi" values={1..10} clear={true} selected={@dice_pool.reroll_once} />
+        </div>
+        <div class="grid rounded-xl bg-zinc-100">
+          <span class="hidden"><.input field={{f, :reroll_none}} type="select" multiple={true} options={[{"Clear", nil}, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]} label="Reroll Until None:" /></span>
+          <.adjustment label="Reroll Until None:" field="reroll_none" type="multi" values={1..10} clear={true} selected={@dice_pool.reroll_none} />
+        </div>
         <:actions>
           <.button phx-disable-with="Rolling ..." class="w-full">
             Roll <span aria-hidden="true">→</span>
