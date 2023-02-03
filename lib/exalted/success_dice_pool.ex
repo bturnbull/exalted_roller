@@ -1,12 +1,12 @@
-defmodule Exaulted.SuccessDicePool do
+defmodule Exalted.SuccessDicePool do
   @moduledoc """
-  A pool of Exaulted 3E success dice.
+  A pool of Exalted 3E success dice.
   """
 
   @default_success [7, 8, 9, 10]
   @default_double [10]
 
-  alias Exaulted.SuccessDie
+  alias Exalted.SuccessDie
 
   defstruct dice: [], label: nil, success: @default_success, double: @default_double, stunt: 0, wound: 0
 
@@ -20,7 +20,7 @@ defmodule Exaulted.SuccessDicePool do
         }
 
   @doc """
-  Create a new `ExaultedRoller.SuccessDicePool` with `count` dice.
+  Create a new `ExaltedRoller.SuccessDicePool` with `count` dice.
 
   Will count successes on 7, 8, 9, and 10 and double successes on 10.  See
   keyword arguments below to override.
@@ -34,12 +34,12 @@ defmodule Exaulted.SuccessDicePool do
 
   ## Examples
 
-      iex> ExaultedRoller.SuccessDicePool.create(3)
-      %ExaultedRoller.SuccessDicePool{
+      iex> ExaltedRoller.SuccessDicePool.create(3)
+      %ExaltedRoller.SuccessDicePool{
         dice: [
-          %ExaultedRoller.SuccessDie{value: 10, history: [{10, "Initial"}], frozen: false},
-          %ExaultedRoller.SuccessDie{value: 7, history: [{7, "Initial"}], frozen: false},
-          %ExaultedRoller.SuccessDie{value: 3, history: [{3, "Initial"}], frozen: false}
+          %ExaltedRoller.SuccessDie{value: 10, history: [{10, "Initial"}], frozen: false},
+          %ExaltedRoller.SuccessDie{value: 7, history: [{7, "Initial"}], frozen: false},
+          %ExaltedRoller.SuccessDie{value: 3, history: [{3, "Initial"}], frozen: false}
         ],
         success: [7, 8, 9, 10],
         double: [10],
@@ -47,13 +47,13 @@ defmodule Exaulted.SuccessDicePool do
         wound: 0
       }
 
-      iex> ExaultedRoller.SuccessDicePool.create(3, double: [9, 10], stunt: 2, wound: -1)
-      %ExaultedRoller.SuccessDicePool{
+      iex> ExaltedRoller.SuccessDicePool.create(3, double: [9, 10], stunt: 2, wound: -1)
+      %ExaltedRoller.SuccessDicePool{
         dice: [
-          %ExaultedRoller.SuccessDie{value: 1, history: [{1, "Initial"}], frozen: false},
-          %ExaultedRoller.SuccessDie{value: 9, history: [{9, "Initial"}], frozen: false},
-          %ExaultedRoller.SuccessDie{value: 10, history: [{10, "Initial"}], frozen: false},
-          %ExaultedRoller.SuccessDie{value: 7, history: [{7, "Initial"}], frozen: false}
+          %ExaltedRoller.SuccessDie{value: 1, history: [{1, "Initial"}], frozen: false},
+          %ExaltedRoller.SuccessDie{value: 9, history: [{9, "Initial"}], frozen: false},
+          %ExaltedRoller.SuccessDie{value: 10, history: [{10, "Initial"}], frozen: false},
+          %ExaltedRoller.SuccessDie{value: 7, history: [{7, "Initial"}], frozen: false}
         ],
         success: [7, 8, 9, 10],
         double: [9, 10],
@@ -70,22 +70,22 @@ defmodule Exaulted.SuccessDicePool do
   end
 
   @doc """
-  Roll an `ExaultedRoller.SuccessDicePool` replacing the current dice result.
+  Roll an `ExaltedRoller.SuccessDicePool` replacing the current dice result.
 
   If you having an existing struct, this will fully replace the dice pool.  Use
   it to start a dice pool over with existing configuration.  if no `count` is
   passed, roll same number of dice as the passed `pool`.
 
-  Returns `%ExaultedRoller.SuccessDicePool{}`
+  Returns `%ExaltedRoller.SuccessDicePool{}`
 
   ## Examples
 
       # Roll 4 dice subtracting 2 for wound penalty
-      iex> pool = ExaultedRoller.SuccessDicePool.create(4, wound: -2)
-      %ExaultedRoller.SuccessDicePool{
+      iex> pool = ExaltedRoller.SuccessDicePool.create(4, wound: -2)
+      %ExaltedRoller.SuccessDicePool{
         dice: [
-          %ExaultedRoller.SuccessDie{value: 6, history: [{6, "Initial"}], frozen: false},
-          %ExaultedRoller.SuccessDie{value: 1, history: [{1, "Initial"}], frozen: false}
+          %ExaltedRoller.SuccessDie{value: 6, history: [{6, "Initial"}], frozen: false},
+          %ExaltedRoller.SuccessDie{value: 1, history: [{1, "Initial"}], frozen: false}
         ],
         success: [7, 8, 9, 10],
         double: [10],
@@ -94,11 +94,11 @@ defmodule Exaulted.SuccessDicePool do
       }
 
       # Roll 4 dice subtracting 2 for wound penalty (same as above)
-      iex> ExaultedRoller.SuccessDicePool.roll(pool)
-      %ExaultedRoller.SuccessDicePool{
+      iex> ExaltedRoller.SuccessDicePool.roll(pool)
+      %ExaltedRoller.SuccessDicePool{
         dice: [
-          %ExaultedRoller.SuccessDie{value: 7, history: [{7, "Initial"}], frozen: false},
-          %ExaultedRoller.SuccessDie{value: 10, history: [{10, "Initial"}], frozen: false}
+          %ExaltedRoller.SuccessDie{value: 7, history: [{7, "Initial"}], frozen: false},
+          %ExaltedRoller.SuccessDie{value: 10, history: [{10, "Initial"}], frozen: false}
         ],
         success: [7, 8, 9, 10],
         double: [10],
@@ -107,12 +107,12 @@ defmodule Exaulted.SuccessDicePool do
       }
 
       # Roll 5 dice using the same config (wound of -2 subtracts 2 dice from pool)
-      iex> ExaultedRoller.SuccessDicePool.roll(pool, 5)
-      %ExaultedRoller.SuccessDicePool{
+      iex> ExaltedRoller.SuccessDicePool.roll(pool, 5)
+      %ExaltedRoller.SuccessDicePool{
         dice: [
-          %ExaultedRoller.SuccessDie{value: 8, history: [{8, "Initial"}], frozen: false},
-          %ExaultedRoller.SuccessDie{value: 5, history: [{5, "Initial"}], frozen: false},
-          %ExaultedRoller.SuccessDie{value: 2, history: [{2, "Initial"}], frozen: false}
+          %ExaltedRoller.SuccessDie{value: 8, history: [{8, "Initial"}], frozen: false},
+          %ExaltedRoller.SuccessDie{value: 5, history: [{5, "Initial"}], frozen: false},
+          %ExaltedRoller.SuccessDie{value: 2, history: [{2, "Initial"}], frozen: false}
         ],
         success: [7, 8, 9, 10],
         double: [10],
@@ -143,11 +143,11 @@ defmodule Exaulted.SuccessDicePool do
 
   ## Examples
 
-      iex> pool = ExaultedRoller.SuccessDicePool.create(2)
-      %ExaultedRoller.SuccessDicePool{
+      iex> pool = ExaltedRoller.SuccessDicePool.create(2)
+      %ExaltedRoller.SuccessDicePool{
         dice: [
-          %ExaultedRoller.SuccessDie{value: 6, history: [{6, "Initial"}], frozen: false},
-          %ExaultedRoller.SuccessDie{value: 1, history: [{1, "Initial"}], frozen: false}
+          %ExaltedRoller.SuccessDie{value: 6, history: [{6, "Initial"}], frozen: false},
+          %ExaltedRoller.SuccessDie{value: 1, history: [{1, "Initial"}], frozen: false}
         ],
         success: [7, 8, 9, 10],
         double: [10],
@@ -155,7 +155,7 @@ defmodule Exaulted.SuccessDicePool do
         wound: 0
       }
 
-      iex> ExaultedRoller.SuccessDicePool.botch?(pool)
+      iex> ExaltedRoller.SuccessDicePool.botch?(pool)
       true
 
   """
@@ -171,13 +171,13 @@ defmodule Exaulted.SuccessDicePool do
 
   ## Examples
 
-      iex> pool = ExaultedRoller.SuccessDicePool.create(2, stunt: 2)
-      %ExaultedRoller.SuccessDicePool{
+      iex> pool = ExaltedRoller.SuccessDicePool.create(2, stunt: 2)
+      %ExaltedRoller.SuccessDicePool{
         dice: [
-          %ExaultedRoller.SuccessDie{value: 10, history: [{10, "Initial"}], frozen: false},
-          %ExaultedRoller.SuccessDie{value: 1, history: [{1, "Initial"}], frozen: false},
-          %ExaultedRoller.SuccessDie{value: 7, history: [{7, "Initial"}], frozen: false},
-          %ExaultedRoller.SuccessDie{value: 2, history: [{2, "Initial"}], frozen: false}
+          %ExaltedRoller.SuccessDie{value: 10, history: [{10, "Initial"}], frozen: false},
+          %ExaltedRoller.SuccessDie{value: 1, history: [{1, "Initial"}], frozen: false},
+          %ExaltedRoller.SuccessDie{value: 7, history: [{7, "Initial"}], frozen: false},
+          %ExaltedRoller.SuccessDie{value: 2, history: [{2, "Initial"}], frozen: false}
         ],
         success: [7, 8, 9, 10],
         double: [10],
@@ -186,7 +186,7 @@ defmodule Exaulted.SuccessDicePool do
       }
 
       # stunt: 2 adds an automatic success, 10s are doubled
-      iex> ExaultedRoller.SuccessDicePool.success_count(pool)
+      iex> ExaltedRoller.SuccessDicePool.success_count(pool)
       4
 
   """
@@ -202,13 +202,13 @@ defmodule Exaulted.SuccessDicePool do
 
   ## Examples
 
-      iex> pool = ExaultedRoller.SuccessDicePool.create(2, stunt: 2)
-      %ExaultedRoller.SuccessDicePool{
+      iex> pool = ExaltedRoller.SuccessDicePool.create(2, stunt: 2)
+      %ExaltedRoller.SuccessDicePool{
         dice: [
-          %ExaultedRoller.SuccessDie{value: 10, history: [{10, "Initial"}], frozen: false},
-          %ExaultedRoller.SuccessDie{value: 1, history: [{1, "Initial"}], frozen: false},
-          %ExaultedRoller.SuccessDie{value: 7, history: [{7, "Initial"}], frozen: false},
-          %ExaultedRoller.SuccessDie{value: 2, history: [{2, "Initial"}], frozen: false}
+          %ExaltedRoller.SuccessDie{value: 10, history: [{10, "Initial"}], frozen: false},
+          %ExaltedRoller.SuccessDie{value: 1, history: [{1, "Initial"}], frozen: false},
+          %ExaltedRoller.SuccessDie{value: 7, history: [{7, "Initial"}], frozen: false},
+          %ExaltedRoller.SuccessDie{value: 2, history: [{2, "Initial"}], frozen: false}
         ],
         success: [7, 8, 9, 10],
         double: [10],
@@ -217,7 +217,7 @@ defmodule Exaulted.SuccessDicePool do
       }
 
       # stunt: 2 adds 1 automatic success
-      iex> ExaultedRoller.SuccessDicePool.automatic_success_count(pool)
+      iex> ExaltedRoller.SuccessDicePool.automatic_success_count(pool)
       1
 
   """
@@ -249,7 +249,7 @@ defmodule Exaulted.SuccessDicePool do
   end
 
   @doc """
-  Returns true if the passed `ExaultedRoller.SuccessDie` represents a success.
+  Returns true if the passed `ExaltedRoller.SuccessDie` represents a success.
   """
   @spec die_success?(__MODULE__.t(), SuccessDie.t()) :: boolean
   def die_success?(%__MODULE__{} = pool, %SuccessDie{} = die) do
@@ -257,7 +257,7 @@ defmodule Exaulted.SuccessDicePool do
   end
 
   @doc """
-  Returns true if the passed `ExaultedRoller.SuccessDie` represents a double success.
+  Returns true if the passed `ExaltedRoller.SuccessDie` represents a double success.
   """
   @spec die_double?(__MODULE__.t(), SuccessDie.t()) :: boolean
   def die_double?(%__MODULE__{} = pool, %SuccessDie{} = die) do
@@ -265,7 +265,7 @@ defmodule Exaulted.SuccessDicePool do
   end
 
   @doc """
-  Reroll a subset of the pool per Exaulted 3E criteria.
+  Reroll a subset of the pool per Exalted 3E criteria.
 
   Criteria options:
 
@@ -280,12 +280,12 @@ defmodule Exaulted.SuccessDicePool do
 
   ## Examples
 
-      iex> pool = ExaultedRoller.SuccessDicePool.create(3)
-      %ExaultedRoller.SuccessDicePool{
+      iex> pool = ExaltedRoller.SuccessDicePool.create(3)
+      %ExaltedRoller.SuccessDicePool{
         dice: [
-          %ExaultedRoller.SuccessDie{value: 10, history: [{10, "Initial"}], frozen: false},
-          %ExaultedRoller.SuccessDie{value: 7, history: [{7, "Initial"}], frozen: false},
-          %ExaultedRoller.SuccessDie{value: 3, history: [{3, "Initial"}], frozen: false}
+          %ExaltedRoller.SuccessDie{value: 10, history: [{10, "Initial"}], frozen: false},
+          %ExaltedRoller.SuccessDie{value: 7, history: [{7, "Initial"}], frozen: false},
+          %ExaltedRoller.SuccessDie{value: 3, history: [{3, "Initial"}], frozen: false}
         ],
         success: [7, 8, 9, 10],
         double: [10],
@@ -293,12 +293,12 @@ defmodule Exaulted.SuccessDicePool do
         wound: 0
       }
 
-      iex> ExaultedRoller.SuccessDicePool.reroll(pool, :not_success, :once)
-      %ExaultedRoller.SuccessDicePool{
+      iex> ExaltedRoller.SuccessDicePool.reroll(pool, :not_success, :once)
+      %ExaltedRoller.SuccessDicePool{
         dice: [
-          %ExaultedRoller.SuccessDie{value: 10, history: [{10, "Initial"}], frozen: false},
-          %ExaultedRoller.SuccessDie{value: 7, history: [{7, "Initial"}], frozen: false},
-          %ExaultedRoller.SuccessDie{value: 5, history: [{5, "Reroll non successes"}, {3, "Initial"}], frozen: false}
+          %ExaltedRoller.SuccessDie{value: 10, history: [{10, "Initial"}], frozen: false},
+          %ExaltedRoller.SuccessDie{value: 7, history: [{7, "Initial"}], frozen: false},
+          %ExaltedRoller.SuccessDie{value: 5, history: [{5, "Reroll non successes"}, {3, "Initial"}], frozen: false}
         ],
         success: [7, 8, 9, 10],
         double: [10],
@@ -306,12 +306,12 @@ defmodule Exaulted.SuccessDicePool do
         wound: 0
       }
 
-      iex> ExaultedRoller.SuccessDicePool.reroll(pool, [3, 4, 5], :until_none)
-      %ExaultedRoller.SuccessDicePool{
+      iex> ExaltedRoller.SuccessDicePool.reroll(pool, [3, 4, 5], :until_none)
+      %ExaltedRoller.SuccessDicePool{
         dice: [
-          %ExaultedRoller.SuccessDie{value: 10, history: [{10, "Initial"}], frozen: false},
-          %ExaultedRoller.SuccessDie{value: 7, history: [{7, "Initial"}], frozen: false},
-          %ExaultedRoller.SuccessDie{
+          %ExaltedRoller.SuccessDie{value: 10, history: [{10, "Initial"}], frozen: false},
+          %ExaltedRoller.SuccessDie{value: 7, history: [{7, "Initial"}], frozen: false},
+          %ExaltedRoller.SuccessDie{
             value: 6,
             history: [
               {6, "Reroll until no [3, 4, 5]"}

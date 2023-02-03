@@ -1,6 +1,6 @@
-defmodule ExaultedRoller.Players do
+defmodule ExaltedRoller.Players do
 
-  alias ExaultedRoller.Players.Player
+  alias ExaltedRoller.Players.Player
 
   @spec create(name: String.t(), character: String.t()) :: Player.t() | nil
   def create(name: name, character: character) do

@@ -7,17 +7,17 @@
 # General application configuration
 import Config
 
-config :exaulted_roller,
-  ecto_repos: [ExaultedRoller.Repo]
+config :exalted_roller,
+  ecto_repos: [ExaltedRoller.Repo]
 
 # Configures the endpoint
-config :exaulted_roller, ExaultedRollerWeb.Endpoint,
+config :exalted_roller, ExaltedRollerWeb.Endpoint,
   url: [host: "localhost"],
   render_errors: [
-    formats: [html: ExaultedRollerWeb.ErrorHTML, json: ExaultedRollerWeb.ErrorJSON],
+    formats: [html: ExaltedRollerWeb.ErrorHTML, json: ExaltedRollerWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: ExaultedRoller.PubSub,
+  pubsub_server: ExaltedRoller.PubSub,
   live_view: [signing_salt: "8JRa3hUy"]
 
 # Configure esbuild (the version is required)

@@ -1,9 +1,9 @@
-defmodule ExaultedRoller.MixProject do
+defmodule ExaltedRoller.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :exaulted_roller,
+      app: :exalted_roller,
       version: "0.1.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -18,7 +18,7 @@ defmodule ExaultedRoller.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {ExaultedRoller.Application, []},
+      mod: {ExaltedRoller.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end

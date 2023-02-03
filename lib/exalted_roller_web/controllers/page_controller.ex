@@ -1,5 +1,5 @@
-defmodule ExaultedRollerWeb.PageController do
-  use ExaultedRollerWeb, :controller
+defmodule ExaltedRollerWeb.PageController do
+  use ExaltedRollerWeb, :controller
 
   def home(conn, _params) do
     # The home page is often custom made,

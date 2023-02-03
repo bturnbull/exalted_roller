@@ -1,3 +1,3 @@
-defmodule ExaultedRollerWeb.Presence do
-  use Phoenix.Presence, otp_app: :exaulted_roller, pubsub_server: ExaultedRoller.PubSub
+defmodule ExaltedRollerWeb.Presence do
+  use Phoenix.Presence, otp_app: :exalted_roller, pubsub_server: ExaltedRoller.PubSub
 end

@@ -1,12 +1,12 @@
-defmodule ExaultedRollerWeb.ErrorHTML do
-  use ExaultedRollerWeb, :html
+defmodule ExaltedRollerWeb.ErrorHTML do
+  use ExaltedRollerWeb, :html
 
   # If you want to customize your error pages,
   # uncomment the embed_templates/1 call below
   # and add pages to the error directory:
   #
-  #   * lib/exaulted_roller_web/controllers/error_html/404.html.heex
-  #   * lib/exaulted_roller_web/controllers/error_html/500.html.heex
+  #   * lib/exalted_roller_web/controllers/error_html/404.html.heex
+  #   * lib/exalted_roller_web/controllers/error_html/500.html.heex
   #
   # embed_templates "error_html/*"
 

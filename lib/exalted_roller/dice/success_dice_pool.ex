@@ -1,4 +1,4 @@
-defmodule ExaultedRoller.Dice.SuccessDicePool do
+defmodule ExaltedRoller.Dice.SuccessDicePool do
   defstruct dice: 1, label: nil, success: [7, 8, 9, 10], double: [10], stunt: 0, wound: 0, reroll_once: [], reroll_none: []
   @type t :: %__MODULE__{dice: pos_integer | nil, label: String.t() | nil, success: [1..10], double: [1..10], stunt: 0..3, wound: -4..0, reroll_once: [1..10], reroll_none: [1..10]}
 

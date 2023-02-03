@@ -1,13 +1,13 @@
-defmodule ExaultedRollerWeb.UserAuth do
-  use ExaultedRollerWeb, :verified_routes
+defmodule ExaltedRollerWeb.UserAuth do
+  use ExaltedRollerWeb, :verified_routes
 
   import Plug.Conn
   import Phoenix.Controller
 
-  alias ExaultedRoller.Players
-  alias ExaultedRoller.Players.Player
-  alias ExaultedRoller.Tables
-  alias ExaultedRoller.Tables.Table
+  alias ExaltedRoller.Players
+  alias ExaltedRoller.Players.Player
+  alias ExaltedRoller.Tables
+  alias ExaltedRoller.Tables.Table
 
   def join_table(conn, %{"player_name" => player_name, "character_name" => character_name, "table_uid" => ""} = _params) do
     case Tables.create() do
@@ -84,16 +84,16 @@ defmodule ExaultedRollerWeb.UserAuth do
   Use the `on_mount` lifecycle macro in LiveViews to mount or authenticate
   the current_user:
 
-      defmodule ExaultedRollerWeb.PageLive do
-        use ExaultedRollerWeb, :live_view
+      defmodule ExaltedRollerWeb.PageLive do
+        use ExaltedRollerWeb, :live_view
 
-        on_mount {ExaultedRollerWeb.UserAuth, :mount_player_and_table}
+        on_mount {ExaltedRollerWeb.UserAuth, :mount_player_and_table}
         ...
       end
 
   Or use the `live_session` of your router to invoke the on_mount callback:
 
-      live_session :authenticated, on_mount: [{ExaultedRollerWeb.UserAuth, :ensure_joined}] do
+      live_session :authenticated, on_mount: [{ExaltedRollerWeb.UserAuth, :ensure_joined}] do
         live "/profile", ProfileLive, :index
       end
   """

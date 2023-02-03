@@ -1,4 +1,4 @@
-# ExaultedRoller
+# ExaltedRoller
 
 To start your Phoenix server:
 

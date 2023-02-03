@@ -1,5 +1,5 @@
-defmodule ExaultedRollerWeb.PlayerJoinLive do
-  use ExaultedRollerWeb, :live_view
+defmodule ExaltedRollerWeb.PlayerJoinLive do
+  use ExaltedRollerWeb, :live_view
 
   def render(assigns) do
     ~H"""
