@@ -100,7 +100,18 @@ defmodule ExaltedRollerWeb.RollerLive do
       |> Dice.SuccessDicePool.changeset(dice_pool_params)
       |> Map.put(:action, :validate)
 
-    {:noreply, assign(socket, :changeset, changeset)}
+    case Ecto.Changeset.apply_action(changeset, :insert) do
+      {:ok, pool} ->
+        {
+          :noreply,
+          socket
+          |> assign(:changeset, changeset)
+          |> assign(:dice_pool, pool)
+        }
+
+      {:error, _} ->
+        {:noreply, assign(socket, :changeset, changeset)}
+    end
   end
 
   @impl true
