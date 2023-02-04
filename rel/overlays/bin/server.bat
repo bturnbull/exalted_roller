@@ -1,2 +1,2 @@
 set PHX_SERVER=true
-call "%~dp0\exaulted_roller" start
+call "%~dp0\exalted_roller" start
