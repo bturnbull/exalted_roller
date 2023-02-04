@@ -162,8 +162,7 @@ defmodule Exalted.SuccessDicePool do
   @spec botch?(__MODULE__.t()) :: boolean
   def botch?(%__MODULE__{} = pool) do
     Enum.any?(pool.dice, &(&1.value == 1)) and
-      not Enum.any?(pool.dice, &die_success?(pool, &1)) and
-      pool.stunt < 2
+      success_count(pool) == 0
   end
 
   @doc """
@@ -194,7 +193,28 @@ defmodule Exalted.SuccessDicePool do
   def success_count(%__MODULE__{} = pool) do
     Enum.count(pool.dice, &die_success?(pool, &1)) +
       Enum.count(pool.dice, &die_double?(pool, &1)) +
+      reroll_success_count(pool) +
       automatic_success_count(pool)
+  end
+
+  @doc """
+  The number of rerolled successes in the pool.
+
+  Counts the number of dice that have been rerolled and were in the success set
+  prior to being rerolled.  Dice in the double set count double.
+  """
+  @spec reroll_success_count(__MODULE__.t()) :: integer
+  def reroll_success_count(%__MODULE__{} = pool) do
+    successes =
+      Stream.map(pool.dice, &(&1.history))        # die history tuples
+      |> Enum.map(&(List.delete_at(&1, 0)))       # remove final die
+      |> List.flatten()
+      |> Stream.map(&(elem(&1, 0)))               # die history values
+      |> Enum.filter(&(&1 in pool.success))       # keep only successes
+
+    doubles = Enum.filter(successes, &(&1 in pool.double))
+
+    length(successes) + length(doubles)
   end
 
   @doc """
