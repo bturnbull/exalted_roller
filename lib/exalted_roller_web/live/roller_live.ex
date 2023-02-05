@@ -70,7 +70,7 @@ defmodule ExaltedRollerWeb.RollerLive do
           <li><strong>Players:</strong> [ <%= for player <- @players do %><%= player.character %> <% end %>]</li>
         </ul>
         <div class="">
-          <%= for {player, roll} <- @table.rolls || [] do %><.success_dice_pool pool={ roll } character={ player.character } /><% end %>
+          <%= for {player, roll} <- @table.rolls || [] do %><.success_dice_pool pool={ roll } character={ player.character } r1={[]} rn={[]} /><% end %>
         </div>
       </div>
     </div>
