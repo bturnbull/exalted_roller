@@ -121,6 +121,8 @@ defmodule ExaltedRollerWeb.RollerLive do
 
   @impl true
   def handle_event("roll", %{"success_dice_pool" => dice_pool_params}, socket) do
+    dice_pool_params = Map.put_new(dice_pool_params, "double", [])   # empty multi-select not in params
+
     case Dice.SuccessDicePool.create(dice_pool_params) do
       {:ok, pool} ->
         count = Map.get(pool, :dice)
