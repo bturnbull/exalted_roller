@@ -75,7 +75,7 @@ defmodule ExaltedRoller.Tables.StorageWorker do
 
     case :ets.lookup(__MODULE__, uid) do
       [{^uid, table}] ->
-        table = %{table | rolls: [{player, roll} | table.rolls]}
+        table = %{table | rolls: [{player, roll} | Enum.slice(table.rolls, 0..8)]}
         :ets.insert(__MODULE__, {table.uid, table})
 
         {:reply, table, state}
