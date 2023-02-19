@@ -17,6 +17,7 @@ defmodule ExaltedRoller.Dice.SuccessDicePool do
     |> cast(attrs, [:dice, :label, :success, :double, :stunt, :wound, :reroll_once, :reroll_none ])
     |> validate_required([:dice])
     |> validate_number(:dice, greater_than: 0)
+    |> validate_number(:dice, less_than: 100)
     |> validate_inclusion(:stunt, 0..3, message: "must be 0 through 3")
     |> validate_inclusion(:wound, -4..0, message: "must be -4 through 0")
     |> validate_subset(:success, 1..10, message: "must contain only 1 through 10")
