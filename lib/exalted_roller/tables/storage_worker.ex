@@ -1,6 +1,11 @@
 defmodule ExaltedRoller.Tables.StorageWorker do
   use GenServer
 
+  require Logger
+
+  @active_table_max 100
+  @table_rolls_max 20
+
   alias ExaltedRoller.Tables
 
   def start_link(args \\ []) do
@@ -35,7 +40,7 @@ defmodule ExaltedRoller.Tables.StorageWorker do
   def init(_args) do
     :ets.new(__MODULE__, [:named_table])
 
-    {:ok, nil}
+    {:ok, %{active_uids: []}}
   end
 
   @impl true
@@ -62,7 +67,7 @@ defmodule ExaltedRoller.Tables.StorageWorker do
       [] ->
         :ets.insert(__MODULE__, {table.uid, table})
 
-        {:reply, table, state}
+        {:reply, table, state, {:continue, {:reaper, table.uid}}}
 
       [{_, _}] ->
         {:reply, nil, state}
@@ -75,10 +80,10 @@ defmodule ExaltedRoller.Tables.StorageWorker do
 
     case :ets.lookup(__MODULE__, uid) do
       [{^uid, table}] ->
-        table = %{table | rolls: [{player, roll} | Enum.slice(table.rolls, 0..8)]}
+        table = %{table | rolls: [{player, roll} | Enum.slice(table.rolls, 0..(@table_rolls_max - 2))]}
         :ets.insert(__MODULE__, {table.uid, table})
 
-        {:reply, table, state}
+        {:reply, table, state, {:continue, {:reaper, table.uid}}}
 
       [] ->
         {:reply, nil, state}
@@ -98,6 +103,15 @@ defmodule ExaltedRoller.Tables.StorageWorker do
     end
   end
 
+  @impl true
+  def handle_continue({:reaper, uid}, state) do
+    active_uids =
+      Enum.uniq([uid | state.active_uids])
+      |> reap_stale_tables()
+
+    {:noreply, %{state | active_uids: active_uids}}
+  end
+
   defp latest_roll(table, player) do
     case Enum.find(table.rolls, [], fn {p, _} -> p == player end) do
       {_, roll} ->
@@ -105,6 +119,18 @@ defmodule ExaltedRoller.Tables.StorageWorker do
 
       _ ->
         nil
+    end
+  end
+
+  defp reap_stale_tables(active_uids) do
+    if length(active_uids) <= @active_table_max do
+      active_uids
+    else
+      {uid, active_uids} = List.pop_at(active_uids, -1)
+      Logger.warn("Table.StorageWorker: Reaping table #{uid}")
+      :ets.delete(__MODULE__, uid)
+
+      reap_stale_tables(active_uids)
     end
   end
 end
