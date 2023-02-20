@@ -24,6 +24,7 @@ defmodule ExaltedRoller.Dice.SuccessDicePool do
     |> validate_clearable_subset(:double, 1..10, message: "must contain only 1 through 10")
     |> validate_clearable_subset(:reroll_once, 1..10, message: "must contain only 1 through 10")
     |> validate_clearable_subset(:reroll_none, 1..10, message: "must contain only 1 through 10")
+    |> validate_reroll_safe(:reroll_none, 1..10, message: "must not contain all values")
   end
 
   defp validate_clearable_subset(changeset, field, criteria, opts) do
@@ -35,6 +36,20 @@ defmodule ExaltedRoller.Dice.SuccessDicePool do
         validate_subset(changeset, field, criteria, opts)
 
       _ ->
+        changeset
+    end
+  end
+
+  defp validate_reroll_safe(changeset, field, criteria, opts) do
+    case fetch_change(changeset, field) do
+      {:ok, change} ->
+        if Enum.sort(Enum.to_list(criteria)) == Enum.sort(change) do
+          add_error(changeset, field, Keyword.get(opts, :message, "invalid"))
+        else
+          changeset
+        end
+
+      :error ->
         changeset
     end
   end
