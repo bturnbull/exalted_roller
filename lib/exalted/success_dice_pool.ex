@@ -8,7 +8,7 @@ defmodule Exalted.SuccessDicePool do
 
   alias Exalted.SuccessDie
 
-  defstruct dice: [], label: nil, success: @default_success, double: @default_double, stunt: 0, wound: 0
+  defstruct dice: [], label: nil, success: @default_success, double: @default_double, stunt: 0, wound: 0, auto: 0
 
   @type t :: %__MODULE__{
           dice: [SuccessDie.t()],
@@ -16,7 +16,8 @@ defmodule Exalted.SuccessDicePool do
           success: [1..10],
           double: [1..10],
           stunt: 0..3,
-          wound: -4..0
+          wound: -4..0,
+          auto: non_neg_integer()
         }
 
   @doc """
@@ -31,6 +32,7 @@ defmodule Exalted.SuccessDicePool do
     * `:double` - List of integers that represent double success.
     * `:stunt` - The stunt level for this pool.
     * `:wound` - The wound penalty for this pool.
+    * `:auto` - Automatic success count (not including stunt)
 
   ## Examples
 
@@ -44,10 +46,11 @@ defmodule Exalted.SuccessDicePool do
         success: [7, 8, 9, 10],
         double: [10],
         stunt: 0,
-        wound: 0
+        wound: 0,
+        auto: 0
       }
 
-      iex> ExaltedRoller.SuccessDicePool.create(3, double: [9, 10], stunt: 2, wound: -1)
+      iex> ExaltedRoller.SuccessDicePool.create(3, double: [9, 10], stunt: 2, wound: -1, auto: 1)
       %ExaltedRoller.SuccessDicePool{
         dice: [
           %ExaltedRoller.SuccessDie{value: 1, history: [{1, "Initial"}], frozen: false},
@@ -58,7 +61,8 @@ defmodule Exalted.SuccessDicePool do
         success: [7, 8, 9, 10],
         double: [9, 10],
         stunt: 2,
-        wound: -1
+        wound: -1,
+        auto: 1
       }
 
   """
@@ -90,7 +94,8 @@ defmodule Exalted.SuccessDicePool do
         success: [7, 8, 9, 10],
         double: [10],
         stunt: 0,
-        wound: -2
+        wound: -2,
+        auto: 0
       }
 
       # Roll 4 dice subtracting 2 for wound penalty (same as above)
@@ -103,7 +108,8 @@ defmodule Exalted.SuccessDicePool do
         success: [7, 8, 9, 10],
         double: [10],
         stunt: 0,
-        wound: -2
+        wound: -2,
+        auto: 0
       }
 
       # Roll 5 dice using the same config (wound of -2 subtracts 2 dice from pool)
@@ -117,7 +123,8 @@ defmodule Exalted.SuccessDicePool do
         success: [7, 8, 9, 10],
         double: [10],
         stunt: 0,
-        wound: -2
+        wound: -2,
+        auto: 0
       }
 
   """
@@ -152,7 +159,8 @@ defmodule Exalted.SuccessDicePool do
         success: [7, 8, 9, 10],
         double: [10],
         stunt: 0,
-        wound: 0
+        wound: 0,
+        auto: 0
       }
 
       iex> ExaltedRoller.SuccessDicePool.botch?(pool)
@@ -170,7 +178,7 @@ defmodule Exalted.SuccessDicePool do
 
   ## Examples
 
-      iex> pool = ExaltedRoller.SuccessDicePool.create(2, stunt: 2)
+      iex> pool = ExaltedRoller.SuccessDicePool.create(2, stunt: 2, auto: 1)
       %ExaltedRoller.SuccessDicePool{
         dice: [
           %ExaltedRoller.SuccessDie{value: 10, history: [{10, "Initial"}], frozen: false},
@@ -181,12 +189,13 @@ defmodule Exalted.SuccessDicePool do
         success: [7, 8, 9, 10],
         double: [10],
         stunt: 2,
-        wound: 0
+        wound: 0,
+        auto: 1
       }
 
       # stunt: 2 adds an automatic success, 10s are doubled
       iex> ExaltedRoller.SuccessDicePool.success_count(pool)
-      4
+      5
 
   """
   @spec success_count(__MODULE__.t()) :: non_neg_integer
@@ -222,7 +231,7 @@ defmodule Exalted.SuccessDicePool do
 
   ## Examples
 
-      iex> pool = ExaltedRoller.SuccessDicePool.create(2, stunt: 2)
+      iex> pool = ExaltedRoller.SuccessDicePool.create(2, stunt: 2, auto: 1)
       %ExaltedRoller.SuccessDicePool{
         dice: [
           %ExaltedRoller.SuccessDie{value: 10, history: [{10, "Initial"}], frozen: false},
@@ -233,17 +242,18 @@ defmodule Exalted.SuccessDicePool do
         success: [7, 8, 9, 10],
         double: [10],
         stunt: 2,
-        wound: 0
+        wound: 0,
+        auto: 1
       }
 
       # stunt: 2 adds 1 automatic success
       iex> ExaltedRoller.SuccessDicePool.automatic_success_count(pool)
-      1
+      2
 
   """
   @spec automatic_success_count(__MODULE__.t()) :: 0..2
   def automatic_success_count(%__MODULE__{} = pool) do
-    max(pool.stunt - 1, 0)
+    max(pool.stunt - 1, 0) + pool.auto
   end
 
   @doc """
@@ -310,7 +320,8 @@ defmodule Exalted.SuccessDicePool do
         success: [7, 8, 9, 10],
         double: [10],
         stunt: 0,
-        wound: 0
+        wound: 0,
+        auto: 0
       }
 
       iex> ExaltedRoller.SuccessDicePool.reroll(pool, :not_success, :once)
@@ -323,7 +334,8 @@ defmodule Exalted.SuccessDicePool do
         success: [7, 8, 9, 10],
         double: [10],
         stunt: 0,
-        wound: 0
+        wound: 0,
+        auto: 0
       }
 
       iex> ExaltedRoller.SuccessDicePool.reroll(pool, [3, 4, 5], :until_none)
@@ -344,7 +356,8 @@ defmodule Exalted.SuccessDicePool do
         success: [7, 8, 9, 10],
         double: [10],
         stunt: 0,
-        wound: 0
+        wound: 0,
+        auto: 0
       }
 
   """
