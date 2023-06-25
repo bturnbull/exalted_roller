@@ -30,6 +30,12 @@ defmodule ExaltedRollerWeb.RollerLive do
           <div class="col-span-2 pt-[5px]"><.adjustment field="dice" type="rel" values={~w[-10 -1 +1 +10]} /></div>
           <div class="pt-1"><.input field={{f, :label}} type="select" prompt="Roll Label" options={["Withering", "Decisive", "Withering Damage", "Decisive Damage", "Reroll", "Cascade", "Social", "Sorcery", "Sidekick", "Join Battle"]} /></div>
         </div>
+        <div class="grid grid-cols-4 gap-2 rounded-xl px-2 bg-zinc-100">
+          <div class="">
+            <.input field={{f, :auto}} type="text" inputmode="numeric" pattern="[0-9]*" required /></div>
+          <div class="pt-[5px]"><.adjustment field="auto" type="rel" values={~w[-1 +1]} /></div>
+          <div class="col-span-2 pt-[14px]">Automatic Successes</div>
+        </div>
         <div class="grid grid-cols-2 gap-2 rounded-xl bg-zinc-100">
           <div class="">
             <span class="hidden"><.input field={{f, :stunt}} type="text" inputmode="numeric" pattern="[0-9]*" label="Stunt:" /></span>
@@ -161,7 +167,7 @@ defmodule ExaltedRollerWeb.RollerLive do
   @impl true
   def handle_event("adjustment", %{"field" => field, "type" => type, "value" => value}, %{assigns: %{dice_pool: dice_pool}} = socket) do
     with {value, _} <- Integer.parse(value),
-         true <- Enum.any?(["dice", "stunt", "wound", "success", "double", "reroll_once", "reroll_none"], &(&1 == field)),
+         true <- Enum.any?(["dice", "stunt", "wound", "auto", "success", "double", "reroll_once", "reroll_none"], &(&1 == field)),
          true <- Enum.any?(["rel", "abs", "multi"], &(&1 == type)),
          field <- String.to_atom(field),
          type <- String.to_atom(type)
